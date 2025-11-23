@@ -57,21 +57,25 @@ function criarEmoji() {
 // -------------------------------
 // 🏃 Botão NÃO fugindo — MOBILE FIXED
 // -------------------------------
+// -------------------------------
+// 🏃 Botão NÃO fugindo — MOBILE FIX DE VERDADE
+// -------------------------------
 let tentativas = 0;
 
 function fugir() {
   tentativas++;
 
+  // emojis
   for (let i = 0; i < tentativas; i++) {
     criarEmoji();
   }
 
-  const botaoLargura = nao.offsetWidth;
-  const botaoAltura = nao.offsetHeight;
+  const largura = nao.offsetWidth;
+  const altura = nao.offsetHeight;
   const margem = 20;
 
-  const maxX = window.innerWidth - botaoLargura - margem;
-  const maxY = window.innerHeight - botaoAltura - margem;
+  const maxX = window.innerWidth - largura - margem;
+  const maxY = window.innerHeight - altura - margem;
 
   let x = Math.random() * maxX;
   let y = Math.random() * maxY;
@@ -82,6 +86,25 @@ function fugir() {
   nao.style.left = x + "px";
   nao.style.top = y + "px";
 }
+
+// PC
+nao.addEventListener("mouseover", fugir);
+
+// MOBILE — Fix real
+nao.addEventListener("touchstart", (e) => {
+  e.preventDefault();
+  fugir();
+});
+
+nao.addEventListener("touchend", (e) => {
+  e.preventDefault();
+});
+
+nao.addEventListener("touchmove", (e) => {
+  e.preventDefault();
+  fugir();
+});
+
 
 // 🔥 DESKTOP
 nao.addEventListener("mouseover", fugir);

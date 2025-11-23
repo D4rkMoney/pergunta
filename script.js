@@ -55,10 +55,8 @@ function criarEmoji() {
 
 
 // -------------------------------
-// 🏃 Botão NÃO fugindo — MOBILE FIXED
 // -------------------------------
-// -------------------------------
-// 🏃 Botão NÃO fugindo — MOBILE FIX DE VERDADE
+// 🏃 Botão NÃO fugindo — SOLUÇÃO DEFINITIVA MOBILE
 // -------------------------------
 let tentativas = 0;
 
@@ -66,58 +64,40 @@ function fugir() {
   tentativas++;
 
   // emojis
-  for (let i = 0; i < tentativas; i++) {
-    criarEmoji();
-  }
+  for (let i = 0; i < tentativas; i++) criarEmoji();
 
-  const largura = nao.offsetWidth;
-  const altura = nao.offsetHeight;
-  const margem = 20;
+  const w = nao.offsetWidth;
+  const h = nao.offsetHeight;
+  const margin = 20;
 
-  const maxX = window.innerWidth - largura - margem;
-  const maxY = window.innerHeight - altura - margem;
+  const maxX = window.innerWidth - w - margin;
+  const maxY = window.innerHeight - h - margin;
 
   let x = Math.random() * maxX;
   let y = Math.random() * maxY;
 
-  x = Math.max(margem, Math.min(x, maxX));
-  y = Math.max(margem, Math.min(y, maxY));
-
-  nao.style.left = x + "px";
-  nao.style.top = y + "px";
+  nao.style.left = Math.max(margin, x) + "px";
+  nao.style.top  = Math.max(margin, y) + "px";
 }
 
 // PC
 nao.addEventListener("mouseover", fugir);
 
-// MOBILE — Fix real
-nao.addEventListener("touchstart", (e) => {
-  e.preventDefault();
+// 📱 MOBILE — O combo que faz funcionar SEM travar:
+nao.addEventListener("touchstart", e => {
+  e.preventDefault();      // impede highlight azul
   fugir();
 });
 
-nao.addEventListener("touchend", (e) => {
-  e.preventDefault();
-});
-
-nao.addEventListener("touchmove", (e) => {
-  e.preventDefault();
+nao.addEventListener("touchmove", e => {
+  e.preventDefault();      // impede o dedo de focar o botão
   fugir();
 });
 
-
-// 🔥 DESKTOP
-nao.addEventListener("mouseover", fugir);
-
-// 🔥 MOBILE
-nao.addEventListener("touchstart", (e) => {
-  e.preventDefault();
-  fugir();
+nao.addEventListener("touchend", e => {
+  e.preventDefault();      // impede clique fantasma
 });
-nao.addEventListener("touchmove", (e) => {
-  e.preventDefault();
-  fugir();
-});
+
 
 
 // -------------------------------

@@ -19,7 +19,7 @@ document.head.appendChild(estilo);
 
 
 // -------------------------------
-// 🎨 Trocar cor do texto da pergunta
+// 🎨 Trocar cor da pergunta
 // -------------------------------
 function mudarCor() {
   const cores = ["#ff2e2e", "#ffb800", "#00ffb2", "#00b7ff", "#ff00e6"];
@@ -29,7 +29,7 @@ setInterval(mudarCor, 300);
 
 
 // -------------------------------
-// 😂 Criar emoji caindo
+// 😂 Emoji caindo
 // -------------------------------
 function criarEmoji() {
   const emoji = document.createElement("div");
@@ -44,36 +44,30 @@ function criarEmoji() {
 
   document.body.appendChild(emoji);
 
-  // animação
   setTimeout(() => {
     emoji.style.top = window.innerHeight + "px";
     emoji.style.transform = "rotate(360deg) scale(1.3)";
     emoji.style.opacity = 0;
   }, 50);
 
-  // remove depois
   setTimeout(() => emoji.remove(), 2200);
 }
 
 
 // -------------------------------
-// 🏃 Botão NÃO fugindo (com limites certos)
+// 🏃 Botão NÃO fugindo — MOBILE FIXED
 // -------------------------------
 let tentativas = 0;
 
-nao.addEventListener("mouseover", () => {
-
-  // aumenta o nível de caos
+function fugir() {
   tentativas++;
 
-  // cria vários emojis por tentativa
   for (let i = 0; i < tentativas; i++) {
     criarEmoji();
   }
 
   const botaoLargura = nao.offsetWidth;
   const botaoAltura = nao.offsetHeight;
-
   const margem = 20;
 
   const maxX = window.innerWidth - botaoLargura - margem;
@@ -87,27 +81,71 @@ nao.addEventListener("mouseover", () => {
 
   nao.style.left = x + "px";
   nao.style.top = y + "px";
+}
+
+// 🔥 DESKTOP
+nao.addEventListener("mouseover", fugir);
+
+// 🔥 MOBILE
+nao.addEventListener("touchstart", (e) => {
+  e.preventDefault();
+  fugir();
 });
- sim.addEventListener("click", () => {
+nao.addEventListener("touchmove", (e) => {
+  e.preventDefault();
+  fugir();
+});
+
+
+// -------------------------------
+// ✔ Botão SIM
+// -------------------------------
+sim.addEventListener("click", () => {
   window.open("https://i.pinimg.com/736x/d1/ca/59/d1ca5901669de6a0b15e5562bab4378c.jpg", "_blank");
 });
 
+
+// -------------------------------
+// 🔊 Música
+// -------------------------------
 const musica = document.getElementById("musica");
 let musicaIniciada = false;
 
-function tocarMusica() {
-  if (!musicaIniciada) {
-    musicaIniciada = true;
-    musica.play().catch(() => {});
-  }
+function iniciarMusica() {
+  if (musicaIniciada) return;
+  musicaIniciada = true;
+
+  const tentarPlay = () => {
+    musica.play().then(() => {
+      // garantir loop mesmo se o "loop" do HTML falhar
+      musica.addEventListener("ended", () => {
+        musica.currentTime = 0;
+        musica.play().catch(() => {});
+      });
+    })
+    .catch(err => {
+      console.log("Tentando novamente...", err);
+      setTimeout(tentarPlay, 500);
+    });
+  };
+
+  tentarPlay();
 }
 
-// QUANDO O USUÁRIO CLICAR EM QUALQUER LUGAR DA TELA
-window.addEventListener("click", tocarMusica, { once: true });
 
-// EXEMPLO: SE TENTAR CLICAR NO BOTÃO "NÃO"
+// desktop
+window.addEventListener("click", iniciarMusica, { once: true });
+
+// mobile (gesto válido)
+window.addEventListener("touchstart", iniciarMusica, { once: true });
+
+// botão NÃO
 const btnNao = document.getElementById("nao");
 if (btnNao) {
-  btnNao.addEventListener("mouseover", tocarMusica);
-  btnNao.addEventListener("click", tocarMusica);
+  btnNao.addEventListener("click", iniciarMusica);
+  btnNao.addEventListener("mouseover", iniciarMusica);
+  btnNao.addEventListener("touchstart", iniciarMusica);
 }
+
+
+

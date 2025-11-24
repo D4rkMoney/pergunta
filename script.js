@@ -34,24 +34,42 @@ setInterval(mudarCor, 300);
 function criarEmoji() {
   const emoji = document.createElement("div");
   emoji.textContent = "😂";
-
   emoji.style.position = "fixed";
-  emoji.style.left = Math.random() * window.innerWidth + "px";
-  emoji.style.top = "-60px";
-  emoji.style.fontSize = "40px";
+  emoji.style.zIndex = "-1";
+
+  // posição inicial aleatória
+  const startX = Math.random() * window.innerWidth;
+
+  // tamanho aleatório (parece mais natural)
+  const size = 24 + Math.random() * 20;
+
+  emoji.style.left = startX + "px";
+  emoji.style.top = "-40px";
+  emoji.style.fontSize = size + "px";
   emoji.style.pointerEvents = "none";
-  emoji.style.transition = "transform 2s ease, top 2s ease, opacity 2s ease";
+  emoji.style.opacity = "1";
 
   document.body.appendChild(emoji);
 
-  setTimeout(() => {
-    emoji.style.top = window.innerHeight + "px";
-    emoji.style.transform = "rotate(360deg) scale(1.3)";
-    emoji.style.opacity = 0;
-  }, 50);
+  let y = -40;
 
-  setTimeout(() => emoji.remove(), 2200);
+  // velocidade reduzida (antes era uns 5~8px por frame)
+  const fallSpeed = 1 + Math.random() * 1.5; // bem mais lento
+
+  function queda() {
+    y += fallSpeed;
+    emoji.style.top = y + "px";
+
+    if (y < window.innerHeight + 50) {
+      requestAnimationFrame(queda);
+    } else {
+      emoji.remove();
+    }
+  }
+
+  requestAnimationFrame(queda);
 }
+
 
 
 // -------------------------------
